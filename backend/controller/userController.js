@@ -12,15 +12,15 @@ const  createUser = async (req, res)=>{
 }
 
 const logUserin = async (req, res)=>{
-    let msg  = 'username or password is not matching';
+    let msg  = {error:'username or password is not matching'};
     const {username, password} = req.body;
     let user = await UserModel.findOne({username});
     if (!user)
-        res.send(msg);
+        res.status(401).send(msg);
 
     let isMatch = await passwordHandler.isPasswordMatching(password, user.password);
     if(!isMatch)
-        res.send(msg);
+        res.status(401).send(msg);
     req.session.user = user;
     res.status(200).send({message: 'user logged in'});
 }
