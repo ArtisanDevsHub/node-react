@@ -27,13 +27,14 @@ const logUserin = async (req, res)=>{
 
 const logUserOut = async (req, res)=>{
     req.session.destroy();
+    res.clearCookie('connect.sid');
     res.status(200).send({message: 'user logged out'});
 }
 
 
 const showUserDashboard = async (req, res)=>{
     let currentUser = req.session.user;
-    console.log(currentUser);
+    // console.log(currentUser);
     let user = {
         id: currentUser._id,
         username: currentUser.username,

@@ -14,4 +14,8 @@ router.post('/user-login', userController.logUserin);
 
 router.post('/user-logout', userController.logUserOut);
 
+router.post('/is-Authenticated', isAuthenticated, (req, res)=>{
+    res.status(200).send({message: 'user is authenticated'})
+});
+
 module.exports = router;

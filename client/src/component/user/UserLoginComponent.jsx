@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import isAuthenticated from '../../utils/authValidator'
+
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -9,17 +11,34 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(undefined);
 
-  const handleLogin = async () => {
+  useEffect(() => {
+    let checkAuth = async () => {
+      const isLoggedIn = await isAuthenticated();
+      console.log('check login: ', isLoggedIn);
+      if(isLoggedIn)
+        navigate('/dashboard');
+    }
+    checkAuth();
+  }, []);
+
+
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post(
         "http://localhost:3000/users/user-login",
         {
           username,
           password,
+        },
+        {
+          withCredentials: true
         }
       );
+      console.log(`response: ${response.status}`);
       if (response.status == 200){
-        navigate("/dashboard");
+        return navigate("/dashboard");
       }
       throw new Error('response.data.message')
     }
@@ -39,7 +58,7 @@ const LoginForm = () => {
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
         <h2 className="text-2xl font-semibold text-center mb-6">User Login</h2>
 
-        <form method="post" action={handleLogin} className="space-y-4">
+        <form method="post" onSubmit={handleLogin} className="space-y-4">
           <div>
             <label
               htmlFor="username"

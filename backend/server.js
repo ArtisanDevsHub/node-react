@@ -22,7 +22,8 @@ app.use(session({
     cookie: { 
         secure: false, // Requires HTTPS
         httpOnly: true, // Prevents client-side JavaScript access
-        maxAge: 1000 * 60 * 10 // Session expiration time in milliseconds (1 min)
+        maxAge: 1000 * 60 * 10, // Session expiration time in milliseconds (1 min)
+        sameSite: 'lax'
     }
 }));
 
